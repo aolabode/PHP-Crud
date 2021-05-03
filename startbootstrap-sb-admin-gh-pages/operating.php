@@ -16,7 +16,7 @@
 <body>
     <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script> -->
 
-    <?php require_once 'productionprocess.php'; ?>
+    <?php require_once 'operatingprocess.php'; ?>
 
     <!-- Navigation bar top -->
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -162,10 +162,10 @@
                         <div class="table-title">
                             <div class="row">
                                 <div class="col-xs-6">
-                                    <h2>Manage <b>Production</b></h2>
+                                    <h2>Manage <b>Operating Expenses</b></h2>
                                 </div>
                                 <div class="col-xs-6">
-                                    <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Production</span></a>
+                                    <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Operating Expense</span></a>
                                     <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
                                 </div>
                             </div>
@@ -173,7 +173,7 @@
 
                         <?php
                         $mysqli = new mysqli('localhost', 'kayla', 'test1234', 'crud') or die(mysqli_error($mysqli));
-                        $result = $mysqli->query("SELECT * FROM production") or die(mysqli_error($mysqli));
+                        $result = $mysqli->query("SELECT * FROM operatingexpenses") or die(mysqli_error($mysqli));
                         //pre_r($result);
                         ?>
 
@@ -182,24 +182,24 @@
                                 <thead>
                                     <tr>
                                         <th>Item</th>
-                                        <th>Vendor</th>
-                                        <th>Description</th>
                                         <th>Amount</th>
                                         <th>Category</th>
+                                        <th>Vendor</th>
+                                        <th>Tax ID</th>
                                         <th colspan="2">Action</th>
                                     </tr>
                                 </thead>
                                 <?php while ($row = $result->fetch_assoc()) : ?>
                                     <tr>
                                         <td><?php echo $row['item']; ?></td>
-                                        <td><?php echo $row['vendor']; ?></td>
-                                        <td><?php echo $row['description']; ?></td>
                                         <td><?php echo $row['amount']; ?></td>
                                         <td><?php echo $row['category']; ?></td>
+                                        <td><?php echo $row['vendor']; ?></td>
+                                        <td><?php echo $row['taxID']; ?></td>
                                         <td>
                                             <!-- <button type="button" class="btn btn-success edit"> EDIT </button> -->
-                                            <a href="production.php?edit=<?php echo $row['productID']; ?>" type="button" class="edit" class="btn btn-info"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                            <a href="productionprocess.php?delete=<?php echo $row['productID']; ?>" class="delete"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                            <a href="operating.php?edit=<?php echo $row['operatingID']; ?>" type="button" class="edit" class="btn btn-info"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                            <a href="operatingprocess.php?delete=<?php echo $row['operatingID']; ?>" class="delete"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
 
                                             <!-- <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a> -->
                                         </td>
@@ -219,32 +219,29 @@
                         ?>
 
                         <div class="d-flex justify-content-center">
-                            <form action="productionprocess.php" method="POST">
-                                <input type="hidden" name="productID" value="<?php echo $productID; ?>">
+                            <form action="operatingprocess.php" method="POST">
+                                <input type="hidden" name="operatingID" value="<?php echo $operatingID; ?>">
 
                                 <div class="form-group">
                                     <label>Item</label>
                                     <input type="text" name="item" class="form-control" value="<?php echo $item; ?>" placeholder="Enter Item">
+                                </div>
+                                <div class="form-group">
+                                    <label>Amount</label>
+                                    <input type="number" min="0.00" max="10000.00" step="0.01" name="amount" class="form-control" value="<?php echo $amount; ?>" placeholder="Enter Amount">
+                                </div>
+                                <div class="form-group">
+                                    <label>Category</label>
+                                    <input type="text" name="category" class="form-control" value="<?php echo $category; ?>" placeholder="Enter Category">
                                 </div>
 
                                 <div class="form-group">
                                     <label>Vendor</label>
                                     <input type="text" name="vendor" class="form-control" value="<?php echo $vendor; ?>" placeholder="Enter Vendor">
                                 </div>
-
                                 <div class="form-group">
-                                    <label>Description</label>
-                                    <textarea class="form-control" name=description value="<?php echo $description; ?>" placeholder="Enter Description"></textarea>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Amount</label>
-                                    <input type="number" min="0.00" max="10000.00" step="0.01" name="amount" class="form-control" value="<?php echo $amount; ?>" placeholder="Enter Amount">
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Category</label>
-                                    <input type="text" name="category" class="form-control" value="<?php echo $category; ?>" placeholder="Enter Category">
+                                    <label>Tax ID</label>
+                                    <input type="number" name="taxID" class="form-control" value="<?php echo $taxID; ?>" placeholder="Enter Tax ID">
                                 </div>
 
                                 <div class="form-group">
@@ -264,36 +261,33 @@
             <div id="addEmployeeModal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="productionprocess.php" method="POST">
-                            <input type="hidden" name="productID" value="<?php echo $productID; ?>">
+                        <form action="operatingprocess.php" method="POST">
+                            <input type="hidden" name="operatingID" value="<?php echo $operatingID; ?>">
                             <div class="modal-header">
-                                <h4 class="modal-title">Add Production</h4>
+                                <h4 class="modal-title">Add Operating Expense</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             </div>
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label>Item</label>
-                                    <input type="text" id="item" name="item" class="form-control" value="<?php echo $item; ?>" placeholder="Enter Item">
+                                    <input type="text" name="item" class="form-control" value="<?php echo $item; ?>" placeholder="Enter Item">
+                                </div>
+                                <div class="form-group">
+                                    <label>Amount</label>
+                                    <input type="number" min="0.00" max="10000.00" step="0.01" name="amount" class="form-control" value="<?php echo $amount; ?>" placeholder="Enter Amount">
+                                </div>
+                                <div class="form-group">
+                                    <label>Category</label>
+                                    <input type="text" name="category" class="form-control" value="<?php echo $category; ?>" placeholder="Enter Category">
                                 </div>
 
                                 <div class="form-group">
                                     <label>Vendor</label>
-                                    <input type="text" id="vendor" name="vendor" class="form-control" value="<?php echo $vendor; ?>" placeholder="Enter Vendor">
+                                    <input type="text" name="vendor" class="form-control" value="<?php echo $vendor; ?>" placeholder="Enter Vendor">
                                 </div>
-
                                 <div class="form-group">
-                                    <label>Description</label>
-                                    <textarea class="form-control" name=description value="<?php echo $description; ?>" placeholder="Enter Description"></textarea>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Amount</label>
-                                    <input type="number" id="amount" name="amount" class="form-control" value="<?php echo $amount; ?>" placeholder="Enter Amount">
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Category</label>
-                                    <input type="text" id="category" name="category" class="form-control" value="<?php echo $category; ?>" placeholder="Enter Category">
+                                    <label>Tax ID</label>
+                                    <input type="number" name="taxID" class="form-control" value="<?php echo $taxID; ?>" placeholder="Enter Tax ID">
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -313,36 +307,33 @@
             <div id="editEmployeeModal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="productionprocess.php" method="POST">
-                            <input type="hidden" id="productID" name="productID" value="<?php echo $productID; ?>">
+                        <form action="operatingprocess.php" method="POST">
+                            <input type="hidden" id="operatingID" name="operatingID" value="<?php echo $operatingID; ?>">
                             <div class="modal-header">
-                                <h4 class="modal-title">Edit Production</h4>
+                                <h4 class="modal-title">Edit Operating Expense</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             </div>
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label>Item</label>
-                                    <input type="text" id="item" name="item" class="form-control" value="<?php echo $item; ?>" placeholder="Enter Item">
+                                    <input type="text" name="item" class="form-control" value="<?php echo $item; ?>" placeholder="Enter Item">
+                                </div>
+                                <div class="form-group">
+                                    <label>Amount</label>
+                                    <input type="number" min="0.00" max="10000.00" step="0.01" name="amount" class="form-control" value="<?php echo $amount; ?>" placeholder="Enter Amount">
+                                </div>
+                                <div class="form-group">
+                                    <label>Category</label>
+                                    <input type="text" name="category" class="form-control" value="<?php echo $category; ?>" placeholder="Enter Category">
                                 </div>
 
                                 <div class="form-group">
                                     <label>Vendor</label>
-                                    <input type="text" id="vendor" name="vendor" class="form-control" value="<?php echo $vendor; ?>" placeholder="Enter Vendor">
+                                    <input type="text" name="vendor" class="form-control" value="<?php echo $vendor; ?>" placeholder="Enter Vendor">
                                 </div>
-
                                 <div class="form-group">
-                                    <label>Description</label>
-                                    <textarea class="form-control" name=description value="<?php echo $description; ?>" placeholder="Enter Description"></textarea>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Amount</label>
-                                    <input type="text" id="amount" name="amount" class="form-control" value="<?php echo $amount; ?>" placeholder="Enter Amount">
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Category</label>
-                                    <input type="text" id="category" name="category" class="form-control" value="<?php echo $category; ?>" placeholder="Enter Category">
+                                    <label>Tax ID</label>
+                                    <input type="number" name="taxID" class="form-control" value="<?php echo $taxID; ?>" placeholder="Enter Tax ID">
                                 </div>
                             </div>
                             <div class="modal-footer">

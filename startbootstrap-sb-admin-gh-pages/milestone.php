@@ -78,7 +78,7 @@
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="/PHP Crud/startbootstrap-sb-admin-gh-pages/actors.php">Actors Expenses</a>
                                 <a class="nav-link" href="/PHP Crud/startbootstrap-sb-admin-gh-pages/production.php">Production Expenses</a>
-                                <a class="nav-link" href="/PHP Crud/startbootstrap-sb-admin-gh-pages/milestone.php">Operating Expenses</a>
+                                <a class="nav-link" href="/PHP Crud/startbootstrap-sb-admin-gh-pages/operating.php">Operating Expenses</a>
                             </nav>
                         </div>
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
@@ -265,28 +265,23 @@
                             </div>
                             <div class="modal-body">
                                 <div class="form-group">
-                                    <label>Role</label>
-                                    <input type="text" id="role" name="role" class="form-control" value="<?php echo $role; ?>" placeholder="Enter Role">
+                                    <label>Date</label>
+                                    <input type="date" name="date" class="form-control" value="<?php echo $date; ?>" placeholder="Enter Date">
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Gender</label>
-                                    <input type="text" id="gender" name="gender" class="form-control" value="<?php echo $gender; ?>" placeholder="Enter Gender">
+                                    <label>Description</label>
+                                    <textarea class="form-control" name=description value="<?php echo $description; ?>" placeholder="Enter Description"></textarea>
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Show</label>
-                                    <input type="text" id="showcolumn" name="showcolumn" class="form-control" value="<?php echo $showcolumn; ?>" placeholder="Enter Show">
+                                    <label>Director Evaluation</label>
+                                    <input type="text" name="directorEvaluation" class="form-control" value="<?php echo $directorEvaluation; ?>" placeholder="Enter Evaluation">
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Actor</label>
-                                    <input type="text" id="actor" name="actor" class="form-control" value="<?php echo $actor; ?>" placeholder="Enter Actor">
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Backup</label>
-                                    <input type="text" id="backup" name="backup" class="form-control" value="<?php echo $backup; ?>" placeholder="Enter Backup">
+                                    <label>Producer Comments</label>
+                                    <input type="text" name="producerComments" class="form-control" value="<?php echo $producerComments; ?>" placeholder="Enter Comments">
                                 </div>
                             </div>
                             <div class="modal-footer">

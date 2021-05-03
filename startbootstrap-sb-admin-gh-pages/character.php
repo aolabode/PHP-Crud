@@ -79,7 +79,7 @@
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="/PHP Crud/startbootstrap-sb-admin-gh-pages/actors.php">Actors Expenses</a>
                                 <a class="nav-link" href="/PHP Crud/startbootstrap-sb-admin-gh-pages/production.php">Production Expenses</a>
-                                <a class="nav-link" href="/PHP Crud/startbootstrap-sb-admin-gh-pages/milestone.php">Operating Expenses</a>
+                                <a class="nav-link" href="/PHP Crud/startbootstrap-sb-admin-gh-pages/operating.php">Operating Expenses</a>
                             </nav>
                         </div>
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
