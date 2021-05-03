@@ -79,4 +79,7 @@ if (isset($_POST['update'])){
     header('location: character.php');
 }
 
+
+
+
 ?>

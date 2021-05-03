@@ -70,13 +70,24 @@
                                 <a class="nav-link" href="/PHP Crud/startbootstrap-sb-admin-gh-pages/milestone.php">Production Milestones</a>
                             </nav>
                         </div>
-
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseExpenses" aria-expanded="false" aria-controls="collapseLayouts">
+                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            Weekly Expenses
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseExpenses" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="/PHP Crud/startbootstrap-sb-admin-gh-pages/actors.php">Actors Expenses</a>
+                                <a class="nav-link" href="/PHP Crud/startbootstrap-sb-admin-gh-pages/production.php">Production Expenses</a>
+                                <a class="nav-link" href="/PHP Crud/startbootstrap-sb-admin-gh-pages/milestone.php">Operating Expenses</a>
+                            </nav>
+                        </div>
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                             Layouts
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="layout-static.html">Static Navigation</a>
                                 <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
@@ -93,7 +104,7 @@
                                     Authentication
                                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>
-                                <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-parent="#sidenavAccordionPages">
+                                <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingThree" data-parent="#sidenavAccordionPages">
                                     <nav class="sb-sidenav-menu-nested nav">
                                         <a class="nav-link" href="login.html">Login</a>
                                         <a class="nav-link" href="register.html">Register</a>
@@ -189,8 +200,11 @@
                                             <!-- <a href="character.php?edit=<?php echo $row['id']; ?>" class="btn btn-info">Edit</a>
                                             <a href="process.php?delete=<?php echo $row['id']; ?>" class="btn btn-danger">Delete</a> -->
 
-                                            <a href="#editEmployeeModal<?php echo $row['id']; ?>" class="edit" class="btn btn-info" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                            <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                            <!-- <button type="button" class="btn btn-success edit"> EDIT </button> -->
+                                            <a href="character.php?edit=<?php echo $row['id']; ?>" type="button" class="edit" class="btn btn-info"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                            <a href="process.php?delete=<?php echo $row['id']; ?>" class="delete"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+
+                                            <!-- <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a> -->
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
@@ -249,7 +263,7 @@
                 </div>
             </div>
 
-            <!-- Edit Modal HTML -->
+            <!-- Add Modal HTML -->
             <div id="addEmployeeModal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -262,27 +276,27 @@
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label>Role</label>
-                                    <input type="text" name="role" class="form-control" value="<?php echo $role; ?>" placeholder="Enter Role">
+                                    <input type="text" id="role" name="role" class="form-control" value="<?php echo $role; ?>" placeholder="Enter Role">
                                 </div>
 
                                 <div class="form-group">
                                     <label>Gender</label>
-                                    <input type="text" name="gender" class="form-control" value="<?php echo $gender; ?>" placeholder="Enter Gender">
+                                    <input type="text" id="gender" name="gender" class="form-control" value="<?php echo $gender; ?>" placeholder="Enter Gender">
                                 </div>
 
                                 <div class="form-group">
                                     <label>Show</label>
-                                    <input type="text" name="showcolumn" class="form-control" value="<?php echo $showcolumn; ?>" placeholder="Enter Show">
+                                    <input type="text" id="showcolumn" name="showcolumn" class="form-control" value="<?php echo $showcolumn; ?>" placeholder="Enter Show">
                                 </div>
 
                                 <div class="form-group">
                                     <label>Actor</label>
-                                    <input type="text" name="actor" class="form-control" value="<?php echo $actor; ?>" placeholder="Enter Actor">
+                                    <input type="text" id="actor" name="actor" class="form-control" value="<?php echo $actor; ?>" placeholder="Enter Actor">
                                 </div>
 
                                 <div class="form-group">
                                     <label>Backup</label>
-                                    <input type="text" name="backup" class="form-control" value="<?php echo $backup; ?>" placeholder="Enter Backup">
+                                    <input type="text" id="backup" name="backup" class="form-control" value="<?php echo $backup; ?>" placeholder="Enter Backup">
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -303,7 +317,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <form action="process.php" method="POST">
-                            <input type="hidden" name="id" value="<?php echo $id; ?>">
+                            <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
                             <div class="modal-header">
                                 <h4 class="modal-title">Edit Role</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -311,27 +325,27 @@
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label>Role</label>
-                                    <input type="text" name="role" class="form-control" value="<?php echo $role; ?>" placeholder="Enter Role">
+                                    <input type="text" id="role" name="role" class="form-control" value="<?php echo $role; ?>" placeholder="Enter Role">
                                 </div>
 
                                 <div class="form-group">
                                     <label>Gender</label>
-                                    <input type="text" name="gender" class="form-control" value="<?php echo $gender; ?>" placeholder="Enter Gender">
+                                    <input type="text" id="gender" name="gender" class="form-control" value="<?php echo $gender; ?>" placeholder="Enter Gender">
                                 </div>
 
                                 <div class="form-group">
                                     <label>Show</label>
-                                    <input type="text" name="showcolumn" class="form-control" value="<?php echo $showcolumn; ?>" placeholder="Enter Show">
+                                    <input type="text" id="showcolumn" name="showcolumn" class="form-control" value="<?php echo $showcolumn; ?>" placeholder="Enter Show">
                                 </div>
 
                                 <div class="form-group">
                                     <label>Actor</label>
-                                    <input type="text" name="actor" class="form-control" value="<?php echo $actor; ?>" placeholder="Enter Actor">
+                                    <input type="text" id="actor" name="actor" class="form-control" value="<?php echo $actor; ?>" placeholder="Enter Actor">
                                 </div>
 
                                 <div class="form-group">
                                     <label>Backup</label>
-                                    <input type="text" name="backup" class="form-control" value="<?php echo $backup; ?>" placeholder="Enter Backup">
+                                    <input type="text" id="backup" name="backup" class="form-control" value="<?php echo $backup; ?>" placeholder="Enter Backup">
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -358,4 +372,30 @@
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
     <script src="assets/demo/datatables-demo.js"></script>
+
+    <!-- <script>
+        $(document).ready(function () {
+            $('.edit').on('click', function() {
+                $('#editEmployeeModal').modal('show');
+
+
+                // $tr = $(this).closest('tr');
+
+                // var data = $tr.children("td").map(function() {
+                //     return $(this).text();
+                // }).get();
+
+                // console.log(data);
+
+
+                // //$('#id').val(data[0]);
+                // $('#id').val(data[0]);
+                // $('#role').val(data[1]);
+                // $('#gender').val(data[2]);
+                // $('#showcolumn').val(data[3]);
+                // $('#actor').val(data[4]);
+                // $('#backup').val(data[5]);
+            });
+        });
+    </script> -->
 </body>

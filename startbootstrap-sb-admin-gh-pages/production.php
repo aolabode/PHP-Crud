@@ -14,8 +14,9 @@
 </head>
 
 <body>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
-    <?php require_once 'milestoneprocess.php'; ?>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script> -->
+
+    <?php require_once 'productionprocess.php'; ?>
 
     <!-- Navigation bar top -->
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -145,7 +146,6 @@
         <div id="layoutSidenav_content">
             <div class="container">
                 <?php
-
                 if (isset($_SESSION['message'])) : ?>
 
                     <div class="alert alert-<?= $_SESSION['msg_type'] ?>">
@@ -162,10 +162,10 @@
                         <div class="table-title">
                             <div class="row">
                                 <div class="col-xs-6">
-                                    <h2>Manage <b>Milestones</b></h2>
+                                    <h2>Manage <b>Production</b></h2>
                                 </div>
                                 <div class="col-xs-6">
-                                    <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Milestone</span></a>
+                                    <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Production</span></a>
                                     <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
                                 </div>
                             </div>
@@ -173,7 +173,7 @@
 
                         <?php
                         $mysqli = new mysqli('localhost', 'kayla', 'test1234', 'crud') or die(mysqli_error($mysqli));
-                        $result = $mysqli->query("SELECT * FROM milestone") or die(mysqli_error($mysqli));
+                        $result = $mysqli->query("SELECT * FROM production") or die(mysqli_error($mysqli));
                         //pre_r($result);
                         ?>
 
@@ -181,25 +181,27 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>Date</th>
+                                        <th>Item</th>
+                                        <th>Vendor</th>
                                         <th>Description</th>
-                                        <th>Director Evaluation</th>
-                                        <th>Producer Comments</th>
+                                        <th>Amount</th>
+                                        <th>Category</th>
                                         <th colspan="2">Action</th>
                                     </tr>
                                 </thead>
                                 <?php while ($row = $result->fetch_assoc()) : ?>
                                     <tr>
-                                        <td><?php echo $row['date']; ?></td>
+                                        <td><?php echo $row['item']; ?></td>
+                                        <td><?php echo $row['vendor']; ?></td>
                                         <td><?php echo $row['description']; ?></td>
-                                        <td><?php echo $row['directorEvaluation']; ?></td>
-                                        <td><?php echo $row['producerComments']; ?></td>
+                                        <td><?php echo $row['amount']; ?></td>
+                                        <td><?php echo $row['category']; ?></td>
                                         <td>
-                                            <!-- <a href="milestone.php?edit=<?php echo $row['milestoneID']; ?>" class="btn btn-info">Edit</a>
-                                        <a href="milestoneprocess.php?delete=<?php echo $row['milestoneID']; ?>" class="btn btn-danger">Delete</a> -->
+                                            <!-- <button type="button" class="btn btn-success edit"> EDIT </button> -->
+                                            <a href="production.php?edit=<?php echo $row['productID']; ?>" type="button" class="edit" class="btn btn-info"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                            <a href="productionprocess.php?delete=<?php echo $row['productID']; ?>" class="delete"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
 
-                                            <a href="milestone.php?edit=<?php echo $row['milestoneID']; ?>" type="button" class="edit" class="btn btn-info"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                            <a href="milestoneprocess.php?delete=<?php echo $row['milestoneID']; ?>" class="delete"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                            <!-- <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a> -->
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
@@ -217,12 +219,17 @@
                         ?>
 
                         <div class="d-flex justify-content-center">
-                            <form action="milestoneprocess.php" method="POST">
-                                <input type="hidden" name="milestoneID" value="<?php echo $milestoneID; ?>">
+                            <form action="productionprocess.php" method="POST">
+                                <input type="hidden" name="productID" value="<?php echo $productID; ?>">
 
                                 <div class="form-group">
-                                    <label>Date</label>
-                                    <input type="date" name="date" class="form-control" value="<?php echo $date; ?>" placeholder="Enter Date">
+                                    <label>Item</label>
+                                    <input type="text" name="item" class="form-control" value="<?php echo $item; ?>" placeholder="Enter Item">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Vendor</label>
+                                    <input type="text" name="vendor" class="form-control" value="<?php echo $vendor; ?>" placeholder="Enter Vendor">
                                 </div>
 
                                 <div class="form-group">
@@ -231,13 +238,13 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Director Evaluation</label>
-                                    <input type="text" name="directorEvaluation" class="form-control" value="<?php echo $directorEvaluation; ?>" placeholder="Enter Evaluation">
+                                    <label>Amount</label>
+                                    <input type="number" min="0.00" max="10000.00" step="0.01" name="amount" class="form-control" value="<?php echo $amount; ?>" placeholder="Enter Amount">
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Producer Comments</label>
-                                    <input type="text" name="producerComments" class="form-control" value="<?php echo $producerComments; ?>" placeholder="Enter Comments">
+                                    <label>Category</label>
+                                    <input type="text" name="category" class="form-control" value="<?php echo $category; ?>" placeholder="Enter Category">
                                 </div>
 
                                 <div class="form-group">
@@ -257,36 +264,36 @@
             <div id="addEmployeeModal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="process.php" method="POST">
-                            <input type="hidden" name="id" value="<?php echo $id; ?>">
+                        <form action="productionprocess.php" method="POST">
+                            <input type="hidden" name="productID" value="<?php echo $productID; ?>">
                             <div class="modal-header">
-                                <h4 class="modal-title">Add Milestone</h4>
+                                <h4 class="modal-title">Add Production</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             </div>
                             <div class="modal-body">
                                 <div class="form-group">
-                                    <label>Role</label>
-                                    <input type="text" id="role" name="role" class="form-control" value="<?php echo $role; ?>" placeholder="Enter Role">
+                                    <label>Item</label>
+                                    <input type="text" id="item" name="item" class="form-control" value="<?php echo $item; ?>" placeholder="Enter Item">
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Gender</label>
-                                    <input type="text" id="gender" name="gender" class="form-control" value="<?php echo $gender; ?>" placeholder="Enter Gender">
+                                    <label>Vendor</label>
+                                    <input type="text" id="vendor" name="vendor" class="form-control" value="<?php echo $vendor; ?>" placeholder="Enter Vendor">
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Show</label>
-                                    <input type="text" id="showcolumn" name="showcolumn" class="form-control" value="<?php echo $showcolumn; ?>" placeholder="Enter Show">
+                                    <label>Description</label>
+                                    <textarea class="form-control" name=description value="<?php echo $description; ?>" placeholder="Enter Description"></textarea>
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Actor</label>
-                                    <input type="text" id="actor" name="actor" class="form-control" value="<?php echo $actor; ?>" placeholder="Enter Actor">
+                                    <label>Amount</label>
+                                    <input type="number" id="amount" name="amount" class="form-control" value="<?php echo $amount; ?>" placeholder="Enter Amount">
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Backup</label>
-                                    <input type="text" id="backup" name="backup" class="form-control" value="<?php echo $backup; ?>" placeholder="Enter Backup">
+                                    <label>Category</label>
+                                    <input type="text" id="category" name="category" class="form-control" value="<?php echo $category; ?>" placeholder="Enter Category">
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -294,7 +301,7 @@
                                 <?php if ($update == true) : ?>
                                     <button type="submit" class="btn btn-info" name="update">Update</button>
                                 <?php else : ?>
-                                    <input type="submit" id="add-role-btn" class="btn btn-success" name="save" value="Save">
+                                    <input type="submit" id="add-name-btn" class="btn btn-success" name="save" value="Save">
                                 <?php endif; ?>
                             </div>
                         </form>
@@ -302,15 +309,90 @@
                 </div>
             </div>
 
+            <!-- Edit Modal HTML -->
+            <div id="editEmployeeModal" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form action="productionprocess.php" method="POST">
+                            <input type="hidden" id="productID" name="productID" value="<?php echo $productID; ?>">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Edit Production</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label>Item</label>
+                                    <input type="text" id="item" name="item" class="form-control" value="<?php echo $item; ?>" placeholder="Enter Item">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Vendor</label>
+                                    <input type="text" id="vendor" name="vendor" class="form-control" value="<?php echo $vendor; ?>" placeholder="Enter Vendor">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <textarea class="form-control" name=description value="<?php echo $description; ?>" placeholder="Enter Description"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Amount</label>
+                                    <input type="text" id="amount" name="amount" class="form-control" value="<?php echo $amount; ?>" placeholder="Enter Amount">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Category</label>
+                                    <input type="text" id="category" name="category" class="form-control" value="<?php echo $category; ?>" placeholder="Enter Category">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                                <?php if ($update != true) : ?>
+                                    <button type="submit" class="btn btn-info" name="update">Update</button>
+                                <?php else : ?>
+                                    <input type="submit" id="add-name-btn" class="btn btn-success" name="save" value="Save">
+                                <?php endif; ?>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
         </div>
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="js/scripts.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-        <script src="assets/demo/chart-area-demo.js"></script>
-        <script src="assets/demo/chart-bar-demo.js"></script>
-        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
-        <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
-        <script src="assets/demo/datatables-demo.js"></script>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="js/scripts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    <script src="assets/demo/chart-area-demo.js"></script>
+    <script src="assets/demo/chart-bar-demo.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+    <script src="assets/demo/datatables-demo.js"></script>
+
+    <!-- <script>
+        $(document).ready(function () {
+            $('.edit').on('click', function() {
+                $('#editEmployeeModal').modal('show');
+
+
+                // $tr = $(this).closest('tr');
+
+                // var data = $tr.children("td").map(function() {
+                //     return $(this).text();
+                // }).get();
+
+                // console.log(data);
+
+
+                // //$('#id').val(data[0]);
+                // $('#id').val(data[0]);
+                // $('#role').val(data[1]);
+                // $('#gender').val(data[2]);
+                // $('#showcolumn').val(data[3]);
+                // $('#actor').val(data[4]);
+                // $('#backup').val(data[5]);
+            });
+        });
+    </script> -->
 </body>

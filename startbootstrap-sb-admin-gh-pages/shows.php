@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bootstrap CRUD Data Table for Database with Modal Form</title>
     <link href="css/styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
 </head>
@@ -67,13 +69,24 @@
                                 <a class="nav-link" href="/PHP Crud/startbootstrap-sb-admin-gh-pages/milestone.php">Production Milestones</a>
                             </nav>
                         </div>
-
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseExpenses" aria-expanded="false" aria-controls="collapseLayouts">
+                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            Weekly Expenses
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseExpenses" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="/PHP Crud/startbootstrap-sb-admin-gh-pages/actors.php">Actors Expenses</a>
+                                <a class="nav-link" href="/PHP Crud/startbootstrap-sb-admin-gh-pages/production.php">Production Expenses</a>
+                                <a class="nav-link" href="/PHP Crud/startbootstrap-sb-admin-gh-pages/milestone.php">Operating Expenses</a>
+                            </nav>
+                        </div>
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                             Layouts
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="layout-static.html">Static Navigation</a>
                                 <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
@@ -90,7 +103,7 @@
                                     Authentication
                                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>
-                                <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-parent="#sidenavAccordionPages">
+                                <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingThree" data-parent="#sidenavAccordionPages">
                                     <nav class="sb-sidenav-menu-nested nav">
                                         <a class="nav-link" href="login.html">Login</a>
                                         <a class="nav-link" href="register.html">Register</a>
@@ -142,114 +155,181 @@
                         ?>
                     </div>
                 <?php endif ?>
-                <div class="container">
-                    <?php
-                    $mysqli = new mysqli('localhost', 'kayla', 'test1234', 'crud') or die(mysqli_error($mysqli));
-                    $result = $mysqli->query("SELECT * FROM showtable") or die(mysqli_error($mysqli));
-                    //$result = $mysqli->query("SELECT * FROM showcategory") or die(mysqli_error($mysqli));
-                    //pre_r($result);
-                    ?>
 
-                    <div class="d-flex justify-content-center">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Title</th>
-                                    <th>Category</th>
-                                    <th>Writer</th>
-                                    <th>Description</th>
-                                    <th>Producer</th>
-                                    <th>Director</th>
-                                    <th>Opening Date</th>
-                                    <th>Set Budget</th>
-                                    <th>Actor Budget</th>
-                                    <th colspan="2">Action</th>
-                                </tr>
-                            </thead>
-                            <?php while ($row = $result->fetch_assoc()) : ?>
-                                <tr>
-                                    <td><?php echo $row['title']; ?></td>
-                                    <td><?php echo $row['categoryName']; ?></td>
-                                    <td><?php echo $row['writer']; ?></td>
-                                    <td><?php echo $row['description']; ?></td>
-                                    <td><?php echo $row['producer']; ?></td>
-                                    <td><?php echo $row['director']; ?></td>
-                                    <td><?php echo $row['openingDate']; ?></td>
-                                    <td><?php echo $row['budgetSet']; ?></td>
-                                    <td><?php echo $row['budgetActor']; ?></td>
-                                    <td>
-                                        <a href="shows.php?edit=<?php echo $row['showID']; ?>" class="btn btn-info">Edit</a>
-                                        <a href="showprocess.php?delete=<?php echo $row['showID']; ?>" class="btn btn-danger">Delete</a>
-                                    </td>
-                                </tr>
-                            <?php endwhile; ?>
-                        </table>
+                <div class="table-responsive">
+                    <div class="table-wrapper">
+                        <div class="table-title">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <h2>Manage <b>Shows</b></h2>
+                                </div>
+                                <div class="col-xs-6">
+                                    <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Show</span></a>
+                                    <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <?php
+                        $mysqli = new mysqli('localhost', 'kayla', 'test1234', 'crud') or die(mysqli_error($mysqli));
+                        $result = $mysqli->query("SELECT * FROM showtable") or die(mysqli_error($mysqli));
+                        //$result = $mysqli->query("SELECT * FROM showcategory") or die(mysqli_error($mysqli));
+                        //pre_r($result);
+                        ?>
+
+                        <div class="d-flex justify-content-center">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Category</th>
+                                        <th>Writer</th>
+                                        <th>Description</th>
+                                        <th>Producer</th>
+                                        <th>Director</th>
+                                        <th>Opening Date</th>
+                                        <th>Set Budget</th>
+                                        <th>Actor Budget</th>
+                                        <th colspan="2">Action</th>
+                                    </tr>
+                                </thead>
+                                <?php while ($row = $result->fetch_assoc()) : ?>
+                                    <tr>
+                                        <td><?php echo $row['title']; ?></td>
+                                        <td><?php echo $row['categoryName']; ?></td>
+                                        <td><?php echo $row['writer']; ?></td>
+                                        <td><?php echo $row['description']; ?></td>
+                                        <td><?php echo $row['producer']; ?></td>
+                                        <td><?php echo $row['director']; ?></td>
+                                        <td><?php echo $row['openingDate']; ?></td>
+                                        <td><?php echo $row['budgetSet']; ?></td>
+                                        <td><?php echo $row['budgetActor']; ?></td>
+                                        <td>
+                                            <!-- <a href="shows.php?edit=<?php echo $row['showID']; ?>" class="btn btn-info">Edit</a>
+                                        <a href="showprocess.php?delete=<?php echo $row['showID']; ?>" class="btn btn-danger">Delete</a> -->
+
+                                            <a href="shows.php?edit=<?php echo $row['showID']; ?>" type="button" class="edit" class="btn btn-info"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                            <a href="showprocess.php?delete=<?php echo $row['showID']; ?>" class="delete"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                        </td>
+                                    </tr>
+                                <?php endwhile; ?>
+                            </table>
+                        </div>
+
+                        <?php
+
+                        function pre_r($array)
+                        {
+                            echo '<pre>';
+                            print_r($array);
+                            echo '</pre>';
+                        }
+                        ?>
+
+                        <div class="d-flex justify-content-center">
+                            <form action="showprocess.php" method="POST">
+                                <input type="hidden" name="showID" value="<?php echo $showID; ?>">
+
+                                <div class="form-group">
+                                    <label>Title</label>
+                                    <input type="text" name="title" class="form-control" value="<?php echo $title; ?>" placeholder="Enter Title">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Category</label>
+                                    <input type="text" name="categoryName" class="form-control" value="<?php echo $categoryName; ?>" placeholder="Enter Category">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Writer</label>
+                                    <input type="number" name="writer" class="form-control" value="<?php echo $writer; ?>" placeholder="Enter number of writers">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <textarea class="form-control" name=description value="<?php echo $description; ?>" placeholder="Enter Description"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Producer</label>
+                                    <input type="number" name="producer" class="form-control" value="<?php echo $producer; ?>" placeholder="Enter number of producers">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Director</label>
+                                    <input type="number" name="director" class="form-control" value="<?php echo $director; ?>" placeholder="Enter number of directors">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Opening Date</label>
+                                    <input type="date" name="openingDate" class="form-control" value="<?php echo $openingDate; ?>" placeholder="Enter Opening Date">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Set Budget</label>
+                                    <input type="number" min="0.00" max="10000.00" step="0.01" name="budgetSet" class="form-control" value="<?php echo $budgetSet; ?>" placeholder="Enter Set Budget">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Actor Budget</label>
+                                    <input type="number" min="0.00" max="10000.00" step="0.01" name="budgetActor" class="form-control" value="<?php echo $budgetActor; ?>" placeholder="Enter Actor Budget">
+                                </div>
+
+                                <div class="form-group">
+                                    <?php if ($update == true) : ?>
+                                        <button type="submit" class="btn btn-info" name="update">Update</button>
+                                    <?php else : ?>
+                                        <button type="submit" class="btn btn-primary" name="save">Save</button>
+                                    <?php endif; ?>
+                                </div>
+                            </form>
+                        </div>
                     </div>
+                </div>
+            </div>
 
-                    <?php
-
-                    function pre_r($array)
-                    {
-                        echo '<pre>';
-                        print_r($array);
-                        echo '</pre>';
-                    }
-                    ?>
-
-                    <div class="d-flex justify-content-center">
-                        <form action="showprocess.php" method="POST">
-                            <input type="hidden" name="showID" value="<?php echo $showID; ?>">
-
-                            <div class="form-group">
-                                <label>Title</label>
-                                <input type="text" name="title" class="form-control" value="<?php echo $title; ?>" placeholder="Enter Title">
+            <!-- Add Modal HTML -->
+            <div id="addEmployeeModal" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form action="process.php" method="POST">
+                            <input type="hidden" name="id" value="<?php echo $id; ?>">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Add Show</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label>Role</label>
+                                    <input type="text" id="role" name="role" class="form-control" value="<?php echo $role; ?>" placeholder="Enter Role">
+                                </div>
 
-                            <div class="form-group">
-                                <label>Category</label>
-                                <input type="text" name="categoryName" class="form-control" value="<?php echo $categoryName; ?>" placeholder="Enter Category">
+                                <div class="form-group">
+                                    <label>Gender</label>
+                                    <input type="text" id="gender" name="gender" class="form-control" value="<?php echo $gender; ?>" placeholder="Enter Gender">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Show</label>
+                                    <input type="text" id="showcolumn" name="showcolumn" class="form-control" value="<?php echo $showcolumn; ?>" placeholder="Enter Show">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Actor</label>
+                                    <input type="text" id="actor" name="actor" class="form-control" value="<?php echo $actor; ?>" placeholder="Enter Actor">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Backup</label>
+                                    <input type="text" id="backup" name="backup" class="form-control" value="<?php echo $backup; ?>" placeholder="Enter Backup">
+                                </div>
                             </div>
-
-                            <div class="form-group">
-                                <label>Writer</label>
-                                <input type="number" name="writer" class="form-control" value="<?php echo $writer; ?>" placeholder="Enter number of writers">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Description</label>
-                                <textarea class="form-control" name=description value="<?php echo $description; ?>" placeholder="Enter Description"></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Producer</label>
-                                <input type="number" name="producer" class="form-control" value="<?php echo $producer; ?>" placeholder="Enter number of producers">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Director</label>
-                                <input type="number" name="director" class="form-control" value="<?php echo $director; ?>" placeholder="Enter number of directors">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Opening Date</label>
-                                <input type="date" name="openingDate" class="form-control" value="<?php echo $openingDate; ?>" placeholder="Enter Opening Date">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Set Budget</label>
-                                <input type="number" min="0.00" max="10000.00" step="0.01" name="budgetSet" class="form-control" value="<?php echo $budgetSet; ?>" placeholder="Enter Set Budget">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Actor Budget</label>
-                                <input type="number" min="0.00" max="10000.00" step="0.01" name="budgetActor" class="form-control" value="<?php echo $budgetActor; ?>" placeholder="Enter Actor Budget">
-                            </div>
-
-                            <div class="form-group">
+                            <div class="modal-footer">
+                                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
                                 <?php if ($update == true) : ?>
                                     <button type="submit" class="btn btn-info" name="update">Update</button>
                                 <?php else : ?>
-                                    <button type="submit" class="btn btn-primary" name="save">Save</button>
+                                    <input type="submit" id="add-role-btn" class="btn btn-success" name="save" value="Save">
                                 <?php endif; ?>
                             </div>
                         </form>
