@@ -45,9 +45,9 @@ if (isset($_POST['save'])){
 }
 
 if (isset($_GET['delete'])){
-    $id = $_GET['delete'];
+    $showID = $_GET['delete'];
 
-    $mysqli->query("DELETE FROM data WHERE id=$id") or die($mysqli->error);
+    $mysqli->query("DELETE FROM showtable WHERE showID=$showID") or die($mysqli->error);
 
     $_SESSION['message'] = "Record has been deleted!";
     $_SESSION['msg_type'] = "danger";
@@ -57,28 +57,36 @@ if (isset($_GET['delete'])){
 }
 
 if (isset($_GET['edit'])) {
-    $id = $_GET['edit'];
+    $showID = $_GET['edit'];
     $update = true;
-    $result = $mysqli->query("SELECT * FROM data WHERE id=$id") or die($mysqli->error);
+    $result = $mysqli->query("SELECT * FROM showtable WHERE showID=$showID") or die($mysqli->error);
     if ($result->num_rows==1){
         $row = $result->fetch_array();
-        $role = $row['role'];
-        $gender = $row['gender'];
-        $showcolumn = $row['showcolumn'];
-        $actor = $row['actor'];
-        $backup = $row['backup'];
+        $title = $row['title'];
+        $categoryName = $row['categoryName'];
+        $writer = $row['writer'];
+        $description = $row['description'];
+        $producer = $row['producer'];
+        $director = $row['director'];
+        $openingDate = $row['openingDate'];
+        $budgetSet = $row['budgetSet'];
+        $budgetActor = $row['budgetActor'];
     }
 }
 
 if (isset($_POST['update'])){
-    $id = $_POST['id'];
-    $role = $_POST['role'];
-    $gender = $_POST['gender'];
-    $showcolumn = $_POST['showcolumn'];
-    $actor = $_POST['actor'];
-    $backup = $_POST['backup'];
+    $showID = $_POST['showID'];
+    $title = $_POST['title'];
+    $categoryName = $_POST['categoryName'];
+    $writer = $_POST['writer'];
+    $description = $_POST['description'];
+    $producer = $_POST['producer'];
+    $director = $_POST['director'];
+    $openingDate = $_POST['openingDate'];
+    $budgetSet = $_POST['budgetSet'];
+    $budgetActor = $_POST['budgetActor'];
 
-    $mysqli->query("UPDATE data SET role='$role', gender='$gender', showcolumn='$showcolumn', actor='$actor', backup='$backup' WHERE id=$id") or 
+    $mysqli->query("UPDATE showtable SET title='$title', categoryName='$categoryName', writer='$writer', description='$description', producer='$producer', director='$director', openingDate='$openingDate', budgetSet='$budgetSet', budgetActor='$budgetActor' WHERE showID=$showID") or 
             die($mysqli->error);
 
     $_SESSION['message'] = "Record has been updated!";
