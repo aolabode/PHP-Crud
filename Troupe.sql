@@ -79,7 +79,7 @@ CREATE TABLE showGenre (
 );
 
 CREATE TABLE showStaff (
-	staffID int NOT NULL,
+	staffID int NOT NULL AUTO_INCREMENT,
 	firstName varchar(30),
 	lastName VARCHAR(30),
 	CONSTRAINT staffID_pk
