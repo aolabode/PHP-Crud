@@ -166,7 +166,7 @@
                                 </div>
                                 <div class="col-xs-6">
                                     <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Operating Expense</span></a>
-                                    <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
+                                    <a href="#deletemodal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
                                 </div>
                             </div>
                         </div>
@@ -181,6 +181,7 @@
                             <table class="table">
                                 <thead>
                                     <tr>
+                                        <th>Operating ID</th>
                                         <th>Item</th>
                                         <th>Amount</th>
                                         <th>Category</th>
@@ -191,6 +192,7 @@
                                 </thead>
                                 <?php while ($row = $result->fetch_assoc()) : ?>
                                     <tr>
+                                        <td><?php echo $row['operatingID']; ?></td>
                                         <td><?php echo $row['item']; ?></td>
                                         <td><?php echo $row['amount']; ?></td>
                                         <td><?php echo $row['category']; ?></td>
@@ -198,8 +200,11 @@
                                         <td><?php echo $row['taxID']; ?></td>
                                         <td>
                                             <!-- <button type="button" class="btn btn-success edit"> EDIT </button> -->
-                                            <a href="operating.php?edit=<?php echo $row['operatingID']; ?>" type="button" class="edit" class="btn btn-info"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                            <a href="operatingprocess.php?delete=<?php echo $row['operatingID']; ?>" class="delete"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                            <!-- <a href="operating.php?edit=<?php echo $row['operatingID']; ?>" type="button" class="edit" class="btn btn-info"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                            <a href="operatingprocess.php?delete=<?php echo $row['operatingID']; ?>" class="delete"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a> -->
+
+                                            <a href="#editEmployeeModal" class="edit" data-toggle="modal" class="btn btn-info"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                            <a href="#deletemodal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
 
                                             <!-- <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a> -->
                                         </td>
@@ -217,42 +222,6 @@
                             echo '</pre>';
                         }
                         ?>
-
-                        <div class="d-flex justify-content-center">
-                            <form action="operatingprocess.php" method="POST">
-                                <input type="hidden" name="operatingID" value="<?php echo $operatingID; ?>">
-
-                                <div class="form-group">
-                                    <label>Item</label>
-                                    <input type="text" name="item" class="form-control" value="<?php echo $item; ?>" placeholder="Enter Item">
-                                </div>
-                                <div class="form-group">
-                                    <label>Amount</label>
-                                    <input type="number" min="0.00" max="10000.00" step="0.01" name="amount" class="form-control" value="<?php echo $amount; ?>" placeholder="Enter Amount">
-                                </div>
-                                <div class="form-group">
-                                    <label>Category</label>
-                                    <input type="text" name="category" class="form-control" value="<?php echo $category; ?>" placeholder="Enter Category">
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Vendor</label>
-                                    <input type="text" name="vendor" class="form-control" value="<?php echo $vendor; ?>" placeholder="Enter Vendor">
-                                </div>
-                                <div class="form-group">
-                                    <label>Tax ID</label>
-                                    <input type="number" name="taxID" class="form-control" value="<?php echo $taxID; ?>" placeholder="Enter Tax ID">
-                                </div>
-
-                                <div class="form-group">
-                                    <?php if ($update == true) : ?>
-                                        <button type="submit" class="btn btn-info" name="update">Update</button>
-                                    <?php else : ?>
-                                        <button type="submit" class="btn btn-primary" name="save">Save</button>
-                                    <?php endif; ?>
-                                </div>
-                            </form>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -292,11 +261,7 @@
                             </div>
                             <div class="modal-footer">
                                 <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                                <?php if ($update == true) : ?>
-                                    <button type="submit" class="btn btn-info" name="update">Update</button>
-                                <?php else : ?>
-                                    <input type="submit" id="add-name-btn" class="btn btn-success" name="save" value="Save">
-                                <?php endif; ?>
+                                <input type="submit" id="add-role-btn" class="btn btn-success" name="save" value="Save">
                             </div>
                         </form>
                     </div>
@@ -308,7 +273,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <form action="operatingprocess.php" method="POST">
-                            <input type="hidden" id="operatingID" name="operatingID" value="<?php echo $operatingID; ?>">
+                            <input type="hidden" name="update_id" id="update_id">
                             <div class="modal-header">
                                 <h4 class="modal-title">Edit Operating Expense</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -316,33 +281,52 @@
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label>Item</label>
-                                    <input type="text" name="item" class="form-control" value="<?php echo $item; ?>" placeholder="Enter Item">
+                                    <input type="text" id="item" name="item" class="form-control" value="<?php echo $item; ?>" placeholder="Enter Item">
                                 </div>
                                 <div class="form-group">
                                     <label>Amount</label>
-                                    <input type="number" min="0.00" max="10000.00" step="0.01" name="amount" class="form-control" value="<?php echo $amount; ?>" placeholder="Enter Amount">
+                                    <input type="number" min="0.00" max="10000.00" step="0.01" id="amount" name="amount" class="form-control" value="<?php echo $amount; ?>" placeholder="Enter Amount">
                                 </div>
                                 <div class="form-group">
                                     <label>Category</label>
-                                    <input type="text" name="category" class="form-control" value="<?php echo $category; ?>" placeholder="Enter Category">
+                                    <input type="text" id="category" name="category" class="form-control" value="<?php echo $category; ?>" placeholder="Enter Category">
                                 </div>
 
                                 <div class="form-group">
                                     <label>Vendor</label>
-                                    <input type="text" name="vendor" class="form-control" value="<?php echo $vendor; ?>" placeholder="Enter Vendor">
+                                    <input type="text" id="vendor" name="vendor" class="form-control" value="<?php echo $vendor; ?>" placeholder="Enter Vendor">
                                 </div>
                                 <div class="form-group">
                                     <label>Tax ID</label>
-                                    <input type="number" name="taxID" class="form-control" value="<?php echo $taxID; ?>" placeholder="Enter Tax ID">
+                                    <input type="number" id="taxID" name="taxID" class="form-control" value="<?php echo $taxID; ?>" placeholder="Enter Tax ID">
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                                <?php if ($update != true) : ?>
-                                    <button type="submit" class="btn btn-info" name="update">Update</button>
-                                <?php else : ?>
-                                    <input type="submit" id="add-name-btn" class="btn btn-success" name="save" value="Save">
-                                <?php endif; ?>
+                                <input type="button" class="btn btn-default cancel" data-dismiss="modal" value="Cancel">
+                                <button type="submit" class="btn btn-info" name="update">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delete Modal HTML -->
+            <div id="deletemodal" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form action="operatingprocess.php" method="POST">
+                            <input type="hidden" name="id" value="<?php echo $id; ?>">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Delete Operating Expense</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <input type="hidden" name="delete_id" id="delete_id">
+                                <h4> Are you sure you want to permanently delete this data? </h4>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default cancel" data-dismiss="modal"> Cancel </button>
+                                <button type="submit" name="delete" class="btn btn-danger">Yes</a>
                             </div>
                         </form>
                     </div>
@@ -361,29 +345,64 @@
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
     <script src="assets/demo/datatables-demo.js"></script>
 
-    <!-- <script>
-        $(document).ready(function () {
+    <script>
+        $(document).ready(function() {
             $('.edit').on('click', function() {
+
                 $('#editEmployeeModal').modal('show');
 
 
-                // $tr = $(this).closest('tr');
+                $tr = $(this).closest('tr');
 
-                // var data = $tr.children("td").map(function() {
-                //     return $(this).text();
-                // }).get();
+                var data = $tr.children('td').map(function() {
+                    return $(this).text();
+                }).get();
 
-                // console.log(data);
+                console.log(data);
 
 
-                // //$('#id').val(data[0]);
-                // $('#id').val(data[0]);
-                // $('#role').val(data[1]);
-                // $('#gender').val(data[2]);
-                // $('#showcolumn').val(data[3]);
-                // $('#actor').val(data[4]);
-                // $('#backup').val(data[5]);
+                //$('#id').val(data[0]);
+                $('#update_id').val(data[0]);
+                $('#item').val(data[1]);
+                $('#amount').val(data[2]);
+                $('#category').val(data[3]);
+                $('#vendor').val(data[4]);
+                $('#taxID').val(data[5]);
+
             });
         });
-    </script> -->
+    </script>
+
+    <script>
+        $(document).ready(function() {
+
+            $('.delete').on('click', function() {
+
+                $('#deletemodal').modal('show');
+
+                $tr = $(this).closest('tr');
+
+                var data = $tr.children('td').map(function() {
+                    return $(this).text();
+                }).get();
+
+                console.log(data);
+                $('#delete_id').val(data[0]);
+
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('.close').on('click', function() {
+                $('#editEmployeeModal').modal('hide');
+                $('#deletemodal').modal('hide');
+            });
+            $('.cancel').on('click', function() {
+                $('#editEmployeeModal').modal('hide');
+                $('#deletemodal').modal('hide');
+            });
+        });
+    </script>
 </body>

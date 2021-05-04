@@ -48,11 +48,24 @@ if (isset($_GET['delete'])){
 
 }
 
+if (isset ($_POST['delete']))
+{
+    $id = $_POST['delete_id'];
+
+    $mysqli->query("DELETE FROM data WHERE id=$id") or die($mysqli->error);
+
+    $_SESSION['message'] = "Record has been deleted!";
+    $_SESSION['msg_type'] = "danger";
+
+    header("location: character.php");
+
+}
+
 if (isset($_GET['edit'])) {
     $id = $_GET['edit'];
     $update = true;
     $result = $mysqli->query("SELECT * FROM data WHERE id=$id") or die($mysqli->error);
-    if ($result->num_rows==1){
+    if ($result->num_rows){
         $row = $result->fetch_array();
         $role = $row['role'];
         $gender = $row['gender'];
@@ -63,7 +76,7 @@ if (isset($_GET['edit'])) {
 }
 
 if (isset($_POST['update'])){
-    $id = $_POST['id'];
+    $id = $_POST['update_id'];
     $role = $_POST['role'];
     $gender = $_POST['gender'];
     $showcolumn = $_POST['showcolumn'];

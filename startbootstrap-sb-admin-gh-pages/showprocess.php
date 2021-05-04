@@ -56,11 +56,24 @@ if (isset($_GET['delete'])){
 
 }
 
+if (isset ($_POST['delete']))
+{
+    $showID = $_POST['delete_id'];
+
+    $mysqli->query("DELETE FROM showtable WHERE showID=$showID") or die($mysqli->error);
+
+    $_SESSION['message'] = "Record has been deleted!";
+    $_SESSION['msg_type'] = "danger";
+
+    header("location: shows.php");
+
+}
+
 if (isset($_GET['edit'])) {
     $showID = $_GET['edit'];
     $update = true;
     $result = $mysqli->query("SELECT * FROM showtable WHERE showID=$showID") or die($mysqli->error);
-    if ($result->num_rows==1){
+    if ($result->num_rows){
         $row = $result->fetch_array();
         $title = $row['title'];
         $categoryName = $row['categoryName'];
@@ -75,7 +88,7 @@ if (isset($_GET['edit'])) {
 }
 
 if (isset($_POST['update'])){
-    $showID = $_POST['showID'];
+    $showID = $_POST['update_id'];
     $title = $_POST['title'];
     $categoryName = $_POST['categoryName'];
     $writer = $_POST['writer'];

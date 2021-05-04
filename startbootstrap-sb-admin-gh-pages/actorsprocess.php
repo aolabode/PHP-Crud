@@ -49,11 +49,24 @@ if (isset($_GET['delete'])){
 
 }
 
+if (isset ($_POST['delete']))
+{
+    $actorID = $_POST['delete_id'];
+
+    $mysqli->query("DELETE FROM actors WHERE actorID=$actorID") or die($mysqli->error);
+
+    $_SESSION['message'] = "Record has been deleted!";
+    $_SESSION['msg_type'] = "danger";
+
+    header("location: actors.php");
+
+}
+
 if (isset($_GET['edit'])) {
     $actorID = $_GET['edit'];
     $update = true;
     $result = $mysqli->query("SELECT * FROM actors WHERE actorID=$actorID") or die($mysqli->error);
-    if ($result->num_rows==1){
+    if ($result->num_rows){
         $row = $result->fetch_array();
         $fullname = $row['fullname'];
         $role = $row['role'];
@@ -64,7 +77,7 @@ if (isset($_GET['edit'])) {
 }
 
 if (isset($_POST['update'])){
-    $actorID = $_POST['actorID'];
+    $actorID = $_POST['update_id'];
     $fullname = $_POST['fullname'];
     $role = $_POST['role'];
     $ssn = $_POST['ssn'];

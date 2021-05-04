@@ -49,11 +49,24 @@ if (isset($_GET['delete'])){
 
 }
 
+if (isset ($_POST['delete']))
+{
+    $productID = $_POST['delete_id'];
+
+    $mysqli->query("DELETE FROM production WHERE productID=$productID") or die($mysqli->error);
+
+    $_SESSION['message'] = "Record has been deleted!";
+    $_SESSION['msg_type'] = "danger";
+
+    header("location: production.php");
+
+}
+
 if (isset($_GET['edit'])) {
     $productID = $_GET['edit'];
     $update = true;
     $result = $mysqli->query("SELECT * FROM production WHERE productID=$productID") or die($mysqli->error);
-    if ($result->num_rows==1){
+    if ($result->num_rows){
         $row = $result->fetch_array();
         $item = $row['item'];
         $vendor = $row['vendor'];
@@ -64,7 +77,7 @@ if (isset($_GET['edit'])) {
 }
 
 if (isset($_POST['update'])){
-    $productID = $_POST['productID'];
+    $productID = $_POST['update_id'];
     $item = $_POST['item'];
     $vendor = $_POST['vendor'];
     $description = $_POST['description'];

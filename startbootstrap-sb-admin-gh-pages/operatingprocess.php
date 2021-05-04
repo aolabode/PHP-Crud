@@ -49,11 +49,24 @@ if (isset($_GET['delete'])){
 
 }
 
+if (isset ($_POST['delete']))
+{
+    $operatingID = $_POST['delete_id'];
+
+    $mysqli->query("DELETE FROM operatingexpenses WHERE operatingID=$operatingID") or die($mysqli->error);
+
+    $_SESSION['message'] = "Record has been deleted!";
+    $_SESSION['msg_type'] = "danger";
+
+    header("location: operating.php");
+
+}
+
 if (isset($_GET['edit'])) {
     $operatingID = $_GET['edit'];
     $update = true;
     $result = $mysqli->query("SELECT * FROM operatingexpenses WHERE operatingID=$operatingID") or die($mysqli->error);
-    if ($result->num_rows==1){
+    if ($result->num_rows){
         $row = $result->fetch_array();
         $item = $row['item'];
         $amount = $row['amount'];
@@ -64,7 +77,7 @@ if (isset($_GET['edit'])) {
 }
 
 if (isset($_POST['update'])){
-    $operatingID = $_POST['operatingID'];
+    $operatingID = $_POST['update_id'];
     $item = $_POST['item'];
     $amount = $_POST['amount'];
     $vendor = $_POST['vendor'];

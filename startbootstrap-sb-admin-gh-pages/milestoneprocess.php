@@ -39,11 +39,24 @@ if (isset($_GET['delete'])){
 
 }
 
+if (isset ($_POST['delete']))
+{
+    $milestoneID = $_POST['delete_id'];
+
+    $mysqli->query("DELETE FROM milestone WHERE milestoneID=$milestoneID") or die($mysqli->error);
+
+    $_SESSION['message'] = "Record has been deleted!";
+    $_SESSION['msg_type'] = "danger";
+
+    header("location: milestone.php");
+
+}
+
 if (isset($_GET['edit'])) {
     $milestoneID = $_GET['edit'];
     $update = true;
     $result = $mysqli->query("SELECT * FROM milestone WHERE milestoneID=$milestoneID") or die($mysqli->error);
-    if ($result->num_rows==1){
+    if ($result->num_rows){
         $row = $result->fetch_array();
         $date = $row['date'];
         $description = $row['description'];
@@ -53,7 +66,7 @@ if (isset($_GET['edit'])) {
 }
 
 if (isset($_POST['update'])){
-    $milestoneID = $_POST['milestoneID'];
+    $milestoneID = $_POST['update_id'];
     $date = $_POST['date'];
     $description = $_POST['description'];
     $directorEvaluation = $_POST['directorEvaluation'];

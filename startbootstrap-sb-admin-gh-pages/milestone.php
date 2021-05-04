@@ -166,7 +166,7 @@
                                 </div>
                                 <div class="col-xs-6">
                                     <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Milestone</span></a>
-                                    <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
+                                    <a href="#deletemodal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
                                 </div>
                             </div>
                         </div>
@@ -181,6 +181,7 @@
                             <table class="table">
                                 <thead>
                                     <tr>
+                                        <th>Milestone ID</th>
                                         <th>Date</th>
                                         <th>Description</th>
                                         <th>Director Evaluation</th>
@@ -190,6 +191,7 @@
                                 </thead>
                                 <?php while ($row = $result->fetch_assoc()) : ?>
                                     <tr>
+                                        <td><?php echo $row['milestoneID']; ?></td>
                                         <td><?php echo $row['date']; ?></td>
                                         <td><?php echo $row['description']; ?></td>
                                         <td><?php echo $row['directorEvaluation']; ?></td>
@@ -198,8 +200,11 @@
                                             <!-- <a href="milestone.php?edit=<?php echo $row['milestoneID']; ?>" class="btn btn-info">Edit</a>
                                         <a href="milestoneprocess.php?delete=<?php echo $row['milestoneID']; ?>" class="btn btn-danger">Delete</a> -->
 
-                                            <a href="milestone.php?edit=<?php echo $row['milestoneID']; ?>" type="button" class="edit" class="btn btn-info"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                            <a href="milestoneprocess.php?delete=<?php echo $row['milestoneID']; ?>" class="delete"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                            <!-- <a href="milestone.php?edit=<?php echo $row['milestoneID']; ?>" type="button" class="edit" class="btn btn-info"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                            <a href="milestoneprocess.php?delete=<?php echo $row['milestoneID']; ?>" class="delete"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a> -->
+
+                                            <a href="#editEmployeeModal" class="edit" data-toggle="modal" class="btn btn-info"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                            <a href="#deletemodal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
@@ -215,40 +220,6 @@
                             echo '</pre>';
                         }
                         ?>
-
-                        <div class="d-flex justify-content-center">
-                            <form action="milestoneprocess.php" method="POST">
-                                <input type="hidden" name="milestoneID" value="<?php echo $milestoneID; ?>">
-
-                                <div class="form-group">
-                                    <label>Date</label>
-                                    <input type="date" name="date" class="form-control" value="<?php echo $date; ?>" placeholder="Enter Date">
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Description</label>
-                                    <textarea class="form-control" name=description value="<?php echo $description; ?>" placeholder="Enter Description"></textarea>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Director Evaluation</label>
-                                    <input type="text" name="directorEvaluation" class="form-control" value="<?php echo $directorEvaluation; ?>" placeholder="Enter Evaluation">
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Producer Comments</label>
-                                    <input type="text" name="producerComments" class="form-control" value="<?php echo $producerComments; ?>" placeholder="Enter Comments">
-                                </div>
-
-                                <div class="form-group">
-                                    <?php if ($update == true) : ?>
-                                        <button type="submit" class="btn btn-info" name="update">Update</button>
-                                    <?php else : ?>
-                                        <button type="submit" class="btn btn-primary" name="save">Save</button>
-                                    <?php endif; ?>
-                                </div>
-                            </form>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -257,7 +228,7 @@
             <div id="addEmployeeModal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="process.php" method="POST">
+                        <form action="milestoneprocess.php" method="POST">
                             <input type="hidden" name="id" value="<?php echo $id; ?>">
                             <div class="modal-header">
                                 <h4 class="modal-title">Add Milestone</h4>
@@ -286,17 +257,75 @@
                             </div>
                             <div class="modal-footer">
                                 <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                                <?php if ($update == true) : ?>
-                                    <button type="submit" class="btn btn-info" name="update">Update</button>
-                                <?php else : ?>
-                                    <input type="submit" id="add-role-btn" class="btn btn-success" name="save" value="Save">
-                                <?php endif; ?>
+                                <input type="submit" id="add-role-btn" class="btn btn-success" name="save" value="Save">
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
 
+            <!-- Edit Modal HTML -->
+            <div id="editEmployeeModal" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form action="milestoneprocess.php" method="POST">
+                            <input type="hidden" name="update_id" id="update_id">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Edit Milestone</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label>Date</label>
+                                    <input type="date" id="date" name="date" class="form-control" value="<?php echo $date; ?>" placeholder="Enter Date">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <textarea class="form-control" id="description" name=description value="<?php echo $description; ?>" placeholder="Enter Description"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Director Evaluation</label>
+                                    <input type="text" id="directorEvaluation" name="directorEvaluation" class="form-control" value="<?php echo $directorEvaluation; ?>" placeholder="Enter Evaluation">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Producer Comments</label>
+                                    <input type="text" id="producerComments" name="producerComments" class="form-control" value="<?php echo $producerComments; ?>" placeholder="Enter Comments">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="button" class="btn btn-default cancel" data-dismiss="modal" value="Cancel">
+                                <button type="submit" class="btn btn-info" name="update">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delete Modal HTML -->
+            <div id="deletemodal" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form action="milestoneprocess.php" method="POST">
+                            <input type="hidden" name="id" value="<?php echo $id; ?>">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Delete Milestone</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <input type="hidden" name="delete_id" id="delete_id">
+                                <h4> Are you sure you want to permanently delete this data? </h4>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default cancel" data-dismiss="modal"> Cancel </button>
+                                <button type="submit" name="delete" class="btn btn-danger">Yes</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
         </div>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
@@ -308,4 +337,63 @@
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
         <script src="assets/demo/datatables-demo.js"></script>
+
+        <script>
+            $(document).ready(function() {
+                $('.edit').on('click', function() {
+
+                    $('#editEmployeeModal').modal('show');
+
+
+                    $tr = $(this).closest('tr');
+
+                    var data = $tr.children('td').map(function() {
+                        return $(this).text();
+                    }).get();
+
+                    console.log(data);
+
+
+                    //$('#id').val(data[0]);
+                    $('#update_id').val(data[0]);
+                    $('#date').val(data[1]);
+                    $('#description').val(data[2]);
+                    $('#directorEvaluation').val(data[3]);
+                    $('#producerComments').val(data[4]);
+                });
+            });
+        </script>
+
+        <script>
+            $(document).ready(function() {
+
+                $('.delete').on('click', function() {
+
+                    $('#deletemodal').modal('show');
+
+                    $tr = $(this).closest('tr');
+
+                    var data = $tr.children('td').map(function() {
+                        return $(this).text();
+                    }).get();
+
+                    console.log(data);
+                    $('#delete_id').val(data[0]);
+
+                });
+            });
+        </script>
+
+        <script>
+            $(document).ready(function() {
+                $('.close').on('click', function() {
+                    $('#editEmployeeModal').modal('hide');
+                    $('#deletemodal').modal('hide');
+                });
+                $('.cancel').on('click', function() {
+                    $('#editEmployeeModal').modal('hide');
+                    $('#deletemodal').modal('hide');
+                });
+            });
+        </script>
 </body>

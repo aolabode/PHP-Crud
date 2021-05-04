@@ -166,7 +166,7 @@
                                 </div>
                                 <div class="col-xs-6">
                                     <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Role</span></a>
-                                    <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
+                                    <a href="#deletemodal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
                                 </div>
                             </div>
                         </div>
@@ -181,6 +181,7 @@
                             <table class="table">
                                 <thead>
                                     <tr>
+                                        <th>Actor ID</th>
                                         <th>Name</th>
                                         <th>Role</th>
                                         <th>SSN</th>
@@ -191,6 +192,7 @@
                                 </thead>
                                 <?php while ($row = $result->fetch_assoc()) : ?>
                                     <tr>
+                                        <td><?php echo $row['actorID']; ?></td>
                                         <td><?php echo $row['fullname']; ?></td>
                                         <td><?php echo $row['role']; ?></td>
                                         <td><?php echo $row['ssn']; ?></td>
@@ -198,8 +200,11 @@
                                         <td><?php echo $row['datePaid']; ?></td>
                                         <td>
                                             <!-- <button type="button" class="btn btn-success edit"> EDIT </button> -->
-                                            <a href="actors.php?edit=<?php echo $row['actorID']; ?>" type="button" class="edit" class="btn btn-info"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                            <a href="actorsprocess.php?delete=<?php echo $row['actorID']; ?>" class="delete"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                            <!-- <a href="actors.php?edit=<?php echo $row['actorID']; ?>" type="button" class="edit" class="btn btn-info"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                            <a href="actorsprocess.php?delete=<?php echo $row['actorID']; ?>" class="delete"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a> -->
+
+                                            <a href="#editEmployeeModal" class="edit" data-toggle="modal" class="btn btn-info"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                            <a href="#deletemodal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
 
                                             <!-- <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a> -->
                                         </td>
@@ -217,11 +222,21 @@
                             echo '</pre>';
                         }
                         ?>
+                    </div>
+                </div>
+            </div>
 
-                        <div class="d-flex justify-content-center">
-                            <form action="actorsprocess.php" method="POST">
-                                <input type="hidden" name="actorID" value="<?php echo $actorID; ?>">
-
+            <!-- Add Modal HTML -->
+            <div id="addEmployeeModal" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form action="actorsprocess.php" method="POST">
+                            <input type="hidden" name="actorID" value="<?php echo $actorID; ?>">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Add Actor</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            </div>
+                            <div class="modal-body">
                                 <div class="form-group">
                                     <label>Name</label>
                                     <input type="text" name="fullname" class="form-control" value="<?php echo $fullname; ?>" placeholder="Enter Name">
@@ -246,28 +261,24 @@
                                     <label>Date Paid</label>
                                     <input type="date" name="datePaid" class="form-control" value="<?php echo $datePaid; ?>" placeholder="Enter Date Paid">
                                 </div>
-
-                                <div class="form-group">
-                                    <?php if ($update == true) : ?>
-                                        <button type="submit" class="btn btn-info" name="update">Update</button>
-                                    <?php else : ?>
-                                        <button type="submit" class="btn btn-primary" name="save">Save</button>
-                                    <?php endif; ?>
-                                </div>
-                            </form>
-                        </div>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                                <input type="submit" id="add-role-btn" class="btn btn-success" name="save" value="Save">
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
 
-            <!-- Add Modal HTML -->
-            <div id="addEmployeeModal" class="modal fade">
+            <!-- Edit Modal HTML -->
+            <div id="editEmployeeModal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <form action="actorsprocess.php" method="POST">
-                            <input type="hidden" name="actorID" value="<?php echo $actorID; ?>">
+                            <input type="hidden" name="update_id" id="update_id">
                             <div class="modal-header">
-                                <h4 class="modal-title">Add Actor</h4>
+                                <h4 class="modal-title">Edit Actor</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             </div>
                             <div class="modal-body">
@@ -288,7 +299,7 @@
 
                                 <div class="form-group">
                                     <label>Amount</label>
-                                    <input type="number" id="amount" name="amount" class="form-control" value="<?php echo $amount; ?>" placeholder="Enter Amount">
+                                    <input type="number" min="0.00" max="10000.00" step="0.01" id="amount" name="amount" class="form-control" value="<?php echo $amount; ?>" placeholder="Enter Amount">
                                 </div>
 
                                 <div class="form-group">
@@ -297,61 +308,31 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                                <?php if ($update == true) : ?>
-                                    <button type="submit" class="btn btn-info" name="update">Update</button>
-                                <?php else : ?>
-                                    <input type="submit" id="add-name-btn" class="btn btn-success" name="save" value="Save">
-                                <?php endif; ?>
+                                <input type="button" class="btn btn-default cancel" data-dismiss="modal" value="Cancel">
+                                <button type="submit" class="btn btn-info" name="update">Update</button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
 
-            <!-- Edit Modal HTML -->
-            <div id="editEmployeeModal" class="modal fade">
+            <!-- Delete Modal HTML -->
+            <div id="deletemodal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <form action="actorsprocess.php" method="POST">
-                            <input type="hidden" id="actorID" name="actorID" value="<?php echo $actorID; ?>">
+                            <input type="hidden" name="id" value="<?php echo $id; ?>">
                             <div class="modal-header">
-                                <h4 class="modal-title">Edit Actor</h4>
+                                <h4 class="modal-title">Delete Actor</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             </div>
                             <div class="modal-body">
-                                <div class="form-group">
-                                    <label>Name</label>
-                                    <input type="text" id="fullname" name="fullname" class="form-control" value="<?php echo $fullname; ?>" placeholder="Enter Name">
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Role</label>
-                                    <input type="text" id="role" name="role" class="form-control" value="<?php echo $role; ?>" placeholder="Enter Role">
-                                </div>
-
-                                <div class="form-group">
-                                    <label>SSN</label>
-                                    <input type="text" id="ssn" name="ssn" class="form-control" value="<?php echo $ssn; ?>" placeholder="Enter SSN">
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Amount</label>
-                                    <input type="text" id="amount" name="amount" class="form-control" value="<?php echo $amount; ?>" placeholder="Enter Amount">
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Date Paid</label>
-                                    <input type="date" id="datePaid" name="datePaid" class="form-control" value="<?php echo $datePaid; ?>" placeholder="Enter Date Paid">
-                                </div>
+                                <input type="hidden" name="delete_id" id="delete_id">
+                                <h4> Are you sure you want to permanently delete this data? </h4>
                             </div>
                             <div class="modal-footer">
-                                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                                <?php if ($update != true) : ?>
-                                    <button type="submit" class="btn btn-info" name="update">Update</button>
-                                <?php else : ?>
-                                    <input type="submit" id="add-name-btn" class="btn btn-success" name="save" value="Save">
-                                <?php endif; ?>
+                                <button type="button" class="btn btn-default cancel" data-dismiss="modal"> Cancel </button>
+                                <button type="submit" name="delete" class="btn btn-danger">Yes</a>
                             </div>
                         </form>
                     </div>
@@ -370,29 +351,64 @@
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
     <script src="assets/demo/datatables-demo.js"></script>
 
-    <!-- <script>
-        $(document).ready(function () {
+    <script>
+        $(document).ready(function() {
             $('.edit').on('click', function() {
+
                 $('#editEmployeeModal').modal('show');
 
 
-                // $tr = $(this).closest('tr');
+                $tr = $(this).closest('tr');
 
-                // var data = $tr.children("td").map(function() {
-                //     return $(this).text();
-                // }).get();
+                var data = $tr.children('td').map(function() {
+                    return $(this).text();
+                }).get();
 
-                // console.log(data);
+                console.log(data);
 
 
-                // //$('#id').val(data[0]);
-                // $('#id').val(data[0]);
-                // $('#role').val(data[1]);
-                // $('#gender').val(data[2]);
-                // $('#showcolumn').val(data[3]);
-                // $('#actor').val(data[4]);
-                // $('#backup').val(data[5]);
+                //$('#id').val(data[0]);
+                $('#update_id').val(data[0]);
+                $('#fullname').val(data[1]);
+                $('#role').val(data[2]);
+                $('#ssn').val(data[3]);
+                $('#amount').val(data[4]);
+                $('#datePaid').val(data[4]);
+
             });
         });
-    </script> -->
+    </script>
+
+    <script>
+        $(document).ready(function() {
+
+            $('.delete').on('click', function() {
+
+                $('#deletemodal').modal('show');
+
+                $tr = $(this).closest('tr');
+
+                var data = $tr.children('td').map(function() {
+                    return $(this).text();
+                }).get();
+
+                console.log(data);
+                $('#delete_id').val(data[0]);
+
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('.close').on('click', function() {
+                $('#editEmployeeModal').modal('hide');
+                $('#deletemodal').modal('hide');
+            });
+            $('.cancel').on('click', function() {
+                $('#editEmployeeModal').modal('hide');
+                $('#deletemodal').modal('hide');
+            });
+        });
+    </script>
 </body>
