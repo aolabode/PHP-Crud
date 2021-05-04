@@ -1,13 +1,3 @@
-/*issues fixed*/
-
-/*circular reference between showStaff and show */
-/*change 'author' to 'writer' 
-	address and city are varchar(50)
-	most fields at DECIMAL(12,2) and below
-	character -> characters
-	show -> shows
-	*/
-
 DROP TABLE IF EXISTS donation;
 DROP TABLE IF EXISTS ticketSales;
 DROP TABLE IF EXISTS theaterRevenue;
@@ -29,10 +19,9 @@ DROP TABLE IF EXISTS theater;
 DROP TABLE IF EXISTS milestone;
 DROP TABLE IF EXISTS showVersion;
 DROP TABLE IF EXISTS characters;
-DROP TABLE IF EXISTS show_genre;
+DROP TABLE IF EXISTS showGenre;
 DROP TABLE IF EXISTS shows;
-DROP TABLE IF EXISTS showStaff;
-DROP TABLE IF EXISTS showCategory;
+DROP TABLE IF EXISTS genre;
 DROP TABLE IF EXISTS role;
 DROP TABLE IF EXISTS actor_phone;
 DROP TABLE IF EXISTS actor;
@@ -71,11 +60,11 @@ CREATE TABLE role (
 		PRIMARY KEY (roleID)
 );
 
-CREATE TABLE showGenre (
-	showGenreID int NOT NULL AUTO_INCREMENT,
+CREATE TABLE genre (
+	genreID int NOT NULL AUTO_INCREMENT,
 	genreName varchar(30) NOT NULL,
-	CONSTRAINT showGenreID_pk 
-		PRIMARY KEY (showGenreID)
+	CONSTRAINT genreID_pk 
+		PRIMARY KEY (genreID)
 );
 
 CREATE TABLE showStaff (
@@ -91,7 +80,7 @@ CREATE TABLE shows (
 	producer int NOT NULL,
 	director int NOT NULL,
 	writer int NOT NULL,
-	title varchar(40),
+	title varchar(40) NOT NULL,
 	budgetSet DECIMAL(12,2),
 	budgetActor DECIMAL(12,2),
 	description TEXT,
@@ -109,17 +98,17 @@ CREATE TABLE shows (
 			REFERENCES showStaff(staffID)
 );
 
-CREATE TABLE shows_genre(
+CREATE TABLE showGenre (
 	showID int NOT NULL,
 	genreID int NOT NULL,
 	CONSTRAINT genreID_showID_pk
 		PRIMARY KEY (showID, genreID),
-	CONSTRAINT shows_genre_showID_fk 
+	CONSTRAINT showGenre_showID_fk 
 		FOREIGN KEY (showID)
 			REFERENCES shows(showID),
-	CONSTRAINT shows_genre_genreID_fk
+	CONSTRAINT showGenre_genreID_fk
 		FOREIGN KEY (genreID)
-			REFERENCES showGenre(genreID)
+			REFERENCES genre(genreID)
 );
 
 
