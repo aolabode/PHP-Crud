@@ -1,4 +1,3 @@
-
 DROP TABLE IF EXISTS donation;
 DROP TABLE IF EXISTS ticketSales;
 DROP TABLE IF EXISTS theaterRevenue;
@@ -33,7 +32,7 @@ DROP TABLE IF EXISTS actor;
 
 
 
-CREATE TABLE actor (
+CREATE TABLE actor(
 	actorID int NOT NULL,
 	firstName varchar(30),
 	lastName varchar(30),
@@ -44,7 +43,7 @@ CREATE TABLE actor (
 		UNIQUE (ssn)
 );
 
-CREATE TABLE actor_phone (
+CREATE TABLE actor_phone(
 	actorID int NOT NULL,
 	cellNumber char(11) NOT NULL,
 	CONSTRAINT actorID_cellNumber_pk
@@ -68,19 +67,35 @@ CREATE TABLE genre (
 		PRIMARY KEY (genreID)
 );
 
+CREATE TABLE showStaff (
+	staffID int NOT NULL AUTO_INCREMENT,
+	firstName varchar(30),
+	lastName VARCHAR(30),
+	CONSTRAINT staffID_pk
+		PRIMARY KEY (staffID)
+);
 
 CREATE TABLE shows (
 	showID int NOT NULL AUTO_INCREMENT,
 	producer int NOT NULL,
 	director int NOT NULL,
 	writer int NOT NULL,
-	title varchar(40),
+	title varchar(40) NOT NULL,
 	budgetSet DECIMAL(12,2),
 	budgetActor DECIMAL(12,2),
 	description TEXT,
 	openingDate DATE,
 	CONSTRAINT showID_pk 
-		PRIMARY KEY (showID)
+		PRIMARY KEY (showID),
+	CONSTRAINT producer_fk 
+		FOREIGN KEY (producer)
+			REFERENCES showStaff(staffID),
+	CONSTRAINT director_fk 
+		FOREIGN KEY (director)
+			REFERENCES showStaff(staffID),	
+	CONSTRAINT writer_fk 
+		FOREIGN KEY (writer)
+			REFERENCES showStaff(staffID)
 );
 
 CREATE TABLE showGenre (
